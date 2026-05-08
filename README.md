@@ -45,7 +45,28 @@ Aplikacija se pokreće na `http://localhost:5000`.
 
 ## Deploy (produkcija)
 
-Gunicorn + nginx + Let's Encrypt. Systemd service drži proces živ:
+Gunicorn + nginx + Let's Encrypt. Konfiguracijski fajlovi su u `deploy/`:
+
+```
+deploy/nginx.conf       — nginx reverse proxy config
+deploy/seniori.service  — systemd service
+```
+
+```bash
+# Kopiraj konfige
+cp deploy/nginx.conf /etc/nginx/sites-available/seniori.org
+ln -s /etc/nginx/sites-available/seniori.org /etc/nginx/sites-enabled/
+cp deploy/seniori.service /etc/systemd/system/
+
+# SSL (Let's Encrypt)
+certbot --nginx -d seniori.org -d www.seniori.org
+
+# Pokreni
+systemctl daemon-reload
+systemctl enable seniori
+systemctl start seniori
+nginx -t && systemctl reload nginx
+```
 
 ```bash
 # Start/restart
@@ -54,6 +75,8 @@ systemctl restart seniori
 # Logovi
 journalctl -u seniori -f
 ```
+
+SSL certifikat se automatski obnavlja — certbot instalira cron job pri prvoj instalaciji. Provjera: `certbot renew --dry-run`.
 
 ## Ako HRT promijeni strukturu stranice
 
@@ -66,6 +89,8 @@ app.py                  — Flask app, scraper, API endpointi
 templates/index.html    — cijeli frontend (HTML + CSS + JS)
 static/manifest.json    — PWA manifest (ikona, standalone mode)
 requirements.txt        — flask, gunicorn
+deploy/nginx.conf       — nginx config (reverse proxy + SSL)
+deploy/seniori.service  — systemd service
 ```
 
 ---
