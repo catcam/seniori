@@ -6,7 +6,7 @@ from flask import Flask, jsonify, render_template
 
 app = Flask(__name__)
 
-USER_AGENT = "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+USER_AGENT = "SeniorRadio/1.0 (+https://seniori.org; Nikša Barlović)"
 BASE_URL = "https://radio.hrt.hr/slusaonica"
 CACHE_TTL = 15 * 60  # 15 minuta
 
@@ -20,7 +20,11 @@ def fetch_episode(slug):
 
     req = urllib.request.Request(
         f"{BASE_URL}/{slug}",
-        headers={"User-Agent": USER_AGENT, "Accept-Language": "hr-HR,hr;q=0.9"},
+        headers={
+            "User-Agent": USER_AGENT,
+            "Referer": "https://seniori.org/",
+            "Accept-Language": "hr-HR,hr;q=0.9",
+        },
     )
     with urllib.request.urlopen(req, timeout=10) as r:
         html = r.read().decode("utf-8")
