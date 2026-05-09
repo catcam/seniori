@@ -236,6 +236,7 @@
 
         document.getElementById('time-' + slug).textContent = formatBroadcastTime(track.broadcastStart);
 
+        fetch('/ping/' + slug).catch(() => {});
         player.src = track.url;
         await player.play();
 
