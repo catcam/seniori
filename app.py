@@ -50,9 +50,13 @@ def api(slug):
     if slug not in ("vijesti", "dnevnik"):
         return jsonify({"error": "not found"}), 404
     try:
-        return jsonify(fetch_episode(slug))
+        resp = jsonify(fetch_episode(slug))
+        resp.headers["Access-Control-Allow-Origin"] = "*"
+        return resp
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        resp = jsonify({"error": str(e)})
+        resp.headers["Access-Control-Allow-Origin"] = "*"
+        return resp, 500
 
 
 if __name__ == "__main__":
