@@ -8,7 +8,7 @@ from flask import Flask, jsonify, render_template, Response
 
 app = Flask(__name__)
 
-USER_AGENT = "SeniorRadio/1.0 (+https://seniori.org; Nikša Barlović)"
+USER_AGENT = "SeniorRadio/1.0 (+https://seniori.org; Niksa Barlovic)"
 BASE_URL = "https://radio.hrt.hr/slusaonica"
 CACHE_TTL = 15 * 60
 STATS_FILE = os.path.join(os.path.dirname(__file__), "stats.json")
